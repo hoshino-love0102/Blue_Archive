@@ -26,5 +26,9 @@ logs
 *.h2.db
 *.mv.db
 
+# Gradle build output
+/build/
+/**/build/
+
 ### local YAML configs ###
 src/main/resources/application-local.yml
