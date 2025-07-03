@@ -1,4 +1,4 @@
-package com.example.blue_archive.dto;
+package com.example.blue_archive.dto.boardpost;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

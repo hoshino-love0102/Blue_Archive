@@ -1,4 +1,4 @@
-package com.example.blue_archive.dto;
+package com.example.blue_archive.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,8 +1,8 @@
 package com.example.blue_archive.controller;
 
-import com.example.blue_archive.dto.BoardPostCreateRequest;
-import com.example.blue_archive.dto.BoardPostResponse;
-import com.example.blue_archive.dto.BoardPostUpdateRequest;
+import com.example.blue_archive.dto.boardpost.BoardPostCreateRequest;
+import com.example.blue_archive.dto.boardpost.BoardPostResponse;
+import com.example.blue_archive.dto.boardpost.BoardPostUpdateRequest;
 import com.example.blue_archive.model.BoardPost;
 import com.example.blue_archive.repository.BoardPostRepository;
 import lombok.RequiredArgsConstructor;
