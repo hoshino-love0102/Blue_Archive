@@ -1,6 +1,13 @@
+# Gradle Scripts
 /gradlew text eol=lf
 *.bat text eol=crlf
+
+# Binaries
 *.jar binary
+
+# Linguist Language Overrides
 *.jsp linguist-language=Java
+
+# Exclude config files from language stats
 *.yml linguist-vendored
 *.yaml linguist-vendored
