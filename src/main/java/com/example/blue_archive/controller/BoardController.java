@@ -1,5 +1,8 @@
 package com.example.blue_archive.controller;
 
+import com.example.blue_archive.dto.BoardPostCreateRequest;
+import com.example.blue_archive.dto.BoardPostResponse;
+import com.example.blue_archive.dto.BoardPostUpdateRequest;
 import com.example.blue_archive.model.BoardPost;
 import com.example.blue_archive.repository.BoardPostRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -21,8 +25,10 @@ public class BoardController {
 
     // 게시글 전체 조회
     @GetMapping
-    public ResponseEntity<List<BoardPost>> getAllPosts() {
-        List<BoardPost> posts = postRepository.findAll();
+    public ResponseEntity<List<BoardPostResponse>> getAllPosts() {
+        List<BoardPostResponse> posts = postRepository.findAll().stream()
+                .map(this::toResponseDto)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(posts);
     }
 
@@ -31,25 +37,30 @@ public class BoardController {
     public ResponseEntity<?> getPost(@PathVariable Long id) {
         BoardPost post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
-        return ResponseEntity.ok(post);
+        return ResponseEntity.ok(toResponseDto(post));
     }
 
     // 게시글 등록
     @PostMapping
-    public ResponseEntity<?> createPost(@RequestBody BoardPost post) {
+    public ResponseEntity<?> createPost(@RequestBody BoardPostCreateRequest request) {
+        BoardPost post = new BoardPost();
+        post.setTitle(request.getTitle());
+        post.setContent(request.getContent());
+        post.setWriter(request.getWriter());
         post.setCreatedAt(LocalDateTime.now());
+
         BoardPost saved = postRepository.save(post);
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.ok(toResponseDto(saved));
     }
 
     // 게시글 수정
     @PutMapping("/{id}")
-    public ResponseEntity<?> updatePost(@PathVariable Long id, @RequestBody BoardPost updatedPost) {
+    public ResponseEntity<?> updatePost(@PathVariable Long id, @RequestBody BoardPostUpdateRequest request) {
         BoardPost post = postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
 
-        post.setTitle(updatedPost.getTitle());
-        post.setContent(updatedPost.getContent());
+        post.setTitle(request.getTitle());
+        post.setContent(request.getContent());
         postRepository.save(post);
 
         return ResponseEntity.ok("수정 완료");
@@ -65,7 +76,6 @@ public class BoardController {
 
         BoardPost post = optional.get();
 
-        // 작성자 체크
         if (!post.getWriter().equals(req.get("userId"))) {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
@@ -74,5 +84,16 @@ public class BoardController {
 
         postRepository.deleteById(id);
         return ResponseEntity.ok("삭제됨");
+    }
+
+    // Entity → Response DTO 변환 메서드
+    private BoardPostResponse toResponseDto(BoardPost post) {
+        BoardPostResponse dto = new BoardPostResponse();
+        dto.setId(post.getId());
+        dto.setTitle(post.getTitle());
+        dto.setContent(post.getContent());
+        dto.setWriter(post.getWriter());
+        dto.setCreatedAt(post.getCreatedAt());
+        return dto;
     }
 }
