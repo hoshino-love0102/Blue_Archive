@@ -1,37 +1,30 @@
-HELP.md
-.gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+### macOS ###
+.DS_Store
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+### Windows ###
+Thumbs.db
+ehthumbs.db
+Desktop.ini
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+### Linux ###
+*~
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+### Logs ###
+logs
+*.log
 
-### VS Code ###
-.vscode/
+### Environment files ###
+.env
+*.env
+
+### Spring Boot ###
+*.jar
+*.war
+*.ear
+
+### Database ###
+*.h2.db
+*.mv.db
+
+### local YAML configs ###
+src/main/resources/application-local.yml
