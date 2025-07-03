@@ -3,6 +3,8 @@ package com.example.blue_archive.controller;
 import com.example.blue_archive.dto.boardpost.BoardPostCreateRequest;
 import com.example.blue_archive.dto.boardpost.BoardPostResponse;
 import com.example.blue_archive.dto.boardpost.BoardPostUpdateRequest;
+import com.example.blue_archive.exception.CustomException;
+import com.example.blue_archive.exception.ErrorCode;
 import com.example.blue_archive.model.BoardPost;
 import com.example.blue_archive.repository.BoardPostRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -36,7 +37,7 @@ public class BoardController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getPost(@PathVariable Long id) {
         BoardPost post = postRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
         return ResponseEntity.ok(toResponseDto(post));
     }
 
@@ -57,7 +58,7 @@ public class BoardController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updatePost(@PathVariable Long id, @RequestBody BoardPostUpdateRequest request) {
         BoardPost post = postRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
 
         post.setTitle(request.getTitle());
         post.setContent(request.getContent());
@@ -69,17 +70,11 @@ public class BoardController {
     // 게시글 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePost(@PathVariable Long id, @RequestBody Map<String, String> req) {
-        Optional<BoardPost> optional = postRepository.findById(id);
-        if (optional.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        BoardPost post = optional.get();
+        BoardPost post = postRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
 
         if (!post.getWriter().equals(req.get("userId"))) {
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body("작성자만 삭제할 수 있습니다.");
+            throw new CustomException(ErrorCode.ACCESS_DENIED);
         }
 
         postRepository.deleteById(id);
