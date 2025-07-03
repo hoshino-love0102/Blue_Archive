@@ -13,10 +13,5 @@ spring:
       hibernate:
         format_sql: true
 
-  mvc:
-    view:
-      prefix: /WEB-INF/views/
-      suffix: .jsp
-
 server:
   port: 8080
