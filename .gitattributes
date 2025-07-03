@@ -2,3 +2,5 @@
 *.bat text eol=crlf
 *.jar binary
 *.jsp linguist-language=Java
+*.yml linguist-vendored
+*.yaml linguist-vendored
