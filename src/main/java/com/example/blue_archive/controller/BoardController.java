@@ -8,7 +8,6 @@ import com.example.blue_archive.exception.ErrorCode;
 import com.example.blue_archive.model.BoardPost;
 import com.example.blue_archive.repository.BoardPostRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
